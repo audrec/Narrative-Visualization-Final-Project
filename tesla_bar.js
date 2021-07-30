@@ -16,7 +16,7 @@ const year2015 = [
     { time: 'April', sales: 1700 },
     { time: 'May', sales: 1700 },
     { time: 'June', sales: 1700 },
-    { time: 'Jul', sales: 1700 },
+    { time: 'July', sales: 1700 },
     { time: 'August', sales: 1700 },
     { time: 'September', sales: 1700 },
     { time: 'October', sales: 1730 },
@@ -114,11 +114,11 @@ const year2021 = [
     { time: 'December', sales: 0 },
 ];
 
-// https://carsalesbase.com/us-tesla/
+
 
 function plotPieChart(data) {
     d3.select('svg').remove();
-
+    
     // svg width and height
     const width = 1500;
     const height = 600;
@@ -132,8 +132,9 @@ function plotPieChart(data) {
         .append('g')
         .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
         
-    const color = d3.scaleOrdinal().domain(data).range(["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]);
-
+    console.log("before coloring: ", data);
+    const color = d3.scaleOrdinal().domain(data).range(["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]);
+    console.log("after coloring: ", color.domain());
     const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
     // Generate the pie
@@ -162,8 +163,11 @@ function plotPieChart(data) {
         totalSales = totalSales + result.sales;
     });
 
+    const percentageArray = [];
+
     arcData.forEach(function(d) {
         d.percentage = parseFloat(d.value / totalSales).toFixed(2) * 100;
+        percentageArray.push(d.percentage);
     });
 
     var g = svg.selectAll(".arc")
@@ -195,14 +199,20 @@ function plotPieChart(data) {
                         return this != current
                     });
                     others.selectAll("path").style('opacity', 1);
+                    tooltip.style("display", "none");
                 })
-                
-                .on("mouseout", function(d){ tooltip.style("display", "none");});
+                .on('click', function() {
+                    tooltip.style("display", "none")
+                })
+
 
     g.append("path")
         .attr("d", arc)
         .style("fill", function(d) {
-            return color(d.data.key);
+            console.log(d, 'fefe');
+            if(d.data != null && d.data.key.length !== 0) {
+                return color(d.data.key);
+            }
         })
 
     g.append("text")
@@ -212,27 +222,71 @@ function plotPieChart(data) {
         .attr("dy", ".35em")
         .style("text-anchor", "middle")
         .text(function(d) {
-            return d.data.key;
+            console.log('jiioo',d);
+            return d.data.percentage.toFixed(0) + '%';
         });
     
-    // Generate groups
-    svg.selectAll('path')
-                    .data(pie(arcData))
-                    .enter()
-                    .append('path')
-                    .attr('d', arc)
-                    .attr('fill', function(d, i) {
-                        return color(d.key);
-                    })
-    
+    const legendRectSize = 18;
+    const legendSpacing = 4;
 
-    d3.select('#pie2015').on('click', () => { plotPieChart(year2015) });
-    d3.select('#pie2016').on('click', () => { plotPieChart(year2016) });
-    d3.select('#pie2017').on('click', () => { plotPieChart(year2017) });
-    d3.select('#pie2018').on('click', () => { plotPieChart(year2018) });
-    d3.select('#pie2019').on('click', () => { plotPieChart(year2019) });
-    d3.select('#pie2020').on('click', () => { plotPieChart(year2020) });
-    d3.select('#pie2021').on('click', () => { plotPieChart(year2021) });
+    const legend = svg.selectAll('.legend')
+                    .data(color.domain().splice(1))
+                    .enter()
+                    .append('g')
+                    .attr('class', 'legend')
+                    .attr('transform', function(d, i) {
+                        const h = legendRectSize + legendSpacing;
+                        const offset = h * color.domain().length / 2;
+                        const horz = legendRectSize * 20;
+                        const vert = i * h - offset;
+                        return 'translate(' + horz + ',' + vert + ')';
+                        
+                    });
+
+    legend.append('rect')
+        .attr('width', legendRectSize)
+        .attr('height', legendRectSize)
+        .style('fill', color)
+        .style('stroke', color);
+
+    legend.append('text')
+        .attr('x', legendRectSize + legendSpacing)
+        .attr('y', legendRectSize - legendSpacing)
+        .text(function(d) {
+            console.log('legend', d);
+            return d; 
+        });
+    
+    d3.select('#pie2015').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2015); 
+                                    });
+    d3.select('#pie2016').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2016) 
+                                    });
+    d3.select('#pie2017').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2017) 
+                                    });
+
+    d3.select('#pie2018').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2018) 
+                                    });
+    d3.select('#pie2019').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2019) 
+                                    });
+
+    d3.select('#pie2020').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2020) 
+                                    });
+    d3.select('#pie2021').on('click', () => { 
+                                        tooltip.remove();
+                                        plotPieChart(year2021) 
+                                    });
 };
 
 
@@ -245,11 +299,31 @@ function plotBarChart(data) {
     const margin = { top: 50, bottom: 50, left: 50, right: 50 };
 
     // Create svg element
-    const svg = d3.select('#chart')
+    let svg = d3.select('#chart')
         .append('svg')
         .attr('height', height - margin.top - margin.bottom)
         .attr('width', width - margin.left - margin.right)
         .attr('viewBox', [0, 0, width, height]);
+    
+    svg.append('text')
+        .attr('class', 'x label')
+        .attr('text-anchor', 'end')
+        .attr('x', width - 50)
+        .attr('y', height - 7)
+        .attr("font-size" , "20px")
+        .attr("font-family" , "sans-serif")
+        .text('Year');
+    
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr('x', -100)
+        .attr("y", -75)
+        .attr("dy", ".95em")
+        .attr("transform", "rotate(-90)")
+        .attr("font-size" , "20px")
+        .attr("font-family" , "sans-serif")
+        .text("Car sales volume (unit) ");
 
     // x scale
     const xScale = d3.scaleBand()
@@ -273,46 +347,82 @@ function plotBarChart(data) {
     svg.append('g').attr('transform', 'translate(' + 0 + ',' + (height - margin.bottom) + ')').call(xAxis).attr('font-size', '20px');
     svg.node();
 
-    const color = d3.scaleOrdinal().domain(data).range(["#4e79a7","#f28e2c","#e15759","#76b7b2","#59a14f","#edc949","#af7aa1","#ff9da7","#9c755f","#bab0ab"]);
+    const color = d3.scaleOrdinal().domain(data).range(["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]);
 
     const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
-    // Bar drawing
-    const bar = svg.append('g') 
-        .selectAll('rect')
+    // Create bars
+    let bars = svg.selectAll('.bar')
         .data(data)
-        .join('rect')
-            .attr('x', (d, i) => xScale(i))
-            .attr('y', (d) => yScale(d.sales))
-            .attr('height', d => yScale(0) - yScale(d.sales))
-            .attr('width', xScale.bandwidth())
-            .attr('class', 'rect')
-            .attr('id', function(d) {
-                return "bar" + d.time;
-            })
-            .text(function(d, i) {
+        .enter()
+        .append('g');
+
+    bars.append('rect')
+        .attr('class', 'bar')
+        .attr('x', (d, i) => xScale(i))
+        .attr('y', (d) => yScale(d.sales))
+        .attr('height', d => yScale(0) - yScale(d.sales))
+        .attr('width', xScale.bandwidth())       
+        .attr('id', function(d) {
+            return "bar" + d.time;
+        })
+        .attr('fill', function(d, i) {
+            return color(i);
+        })
+        .on("mousemove", function(d){
+            tooltip
+                .style("left", d3.event.pageX - 50 + "px")
+                .style("top", d3.event.pageY - 70 + "px")
+                .style("display", "inline-block")
+                .html("In " + (d.time) + ", <br>" + "Total Sales: " + (d.sales) + " cars");
+        })
+        .on("mouseout", function(d){ tooltip.style("display", "none");});
+
+    //svg.selectAll('rect')
+            bars.append('text')
+            .text(function(d) {
                 console.log("check", d);
                 return d.sales;
             })
-            .attr('fill', function(d, i) {
-                return color(i);
+            .attr("x", function(d, i){
+                return xScale(i) + xScale.bandwidth() / 2;
             })
-            .on("mousemove", function(d){
-                tooltip
-                  .style("left", d3.event.pageX - 50 + "px")
-                  .style("top", d3.event.pageY - 70 + "px")
-                  .style("display", "inline-block")
-                  .html("In " + (d.time) + ", <br>" + "Total Sales: " + (d.sales) + " cars");
+            .attr("y", function(d){
+                return yScale(d.sales) - 5;
             })
-            .on("mouseout", function(d){ tooltip.style("display", "none");})
+            .attr("font-family" , "sans-serif")
+            .attr("font-size" , "17px")
+            .attr("fill" , "black")
+            .attr("text-anchor", "middle");
 
-    d3.select('#bar2015').on('click', () => { plotBarChart(year2015) });
-    d3.select('#bar2016').on('click', () => { plotBarChart(year2016) });
-    d3.select('#bar2017').on('click', () => { plotBarChart(year2017) });
-    d3.select('#bar2018').on('click', () => { plotBarChart(year2018) });
-    d3.select('#bar2019').on('click', () => { plotBarChart(year2019) });
-    d3.select('#bar2020').on('click', () => { plotBarChart(year2020) });
-    d3.select('#bar2021').on('click', () => { plotBarChart(year2021) });
+    d3.select('#bar2015').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2015) 
+                                        });
+    d3.select('#bar2016').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2016) 
+                                        });
+    d3.select('#bar2017').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2017) 
+                                        });
+    d3.select('#bar2018').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2018) 
+                                        });
+    d3.select('#bar2019').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2019) 
+                                        });
+    d3.select('#bar2020').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2020) 
+                                        });
+    d3.select('#bar2021').on('click', () => { 
+                                            tooltip.remove();
+                                            plotBarChart(year2021) 
+                                        });
 };
 
 let sel = "Bar";
