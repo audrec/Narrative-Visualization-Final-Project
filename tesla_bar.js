@@ -270,7 +270,6 @@ function plotBarChart(data) {
         
     bars.append('text')
         .text(function(d) {
-            console.log("check", d);
             return d.sales;
         })
         .attr("x", function(d, i){
