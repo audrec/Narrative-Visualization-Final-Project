@@ -1,121 +1,3 @@
-
-const totalSalesData = [
-    {time: '2015', sales: 87412 },
-    {time: '2016', sales: 26725 },
-    {time: '2017', sales: 50067 },
-    {time: '2018', sales: 197517 },
-    {time: '2019', sales: 195125 },
-    {time: '2020', sales: 292902 },
-    {time: '2021', sales: 139302 },
-];
-
-const year2015 = [
-    { time: 'January', sales: 0 },
-    { time: 'Febuary', sales: 2000 },
-    { time: 'March', sales: 1200 },
-    { time: 'April', sales: 1700 },
-    { time: 'May', sales: 1700 },
-    { time: 'June', sales: 1700 },
-    { time: 'July', sales: 1700 },
-    { time: 'August', sales: 1700 },
-    { time: 'September', sales: 1700 },
-    { time: 'October', sales: 1730 },
-    { time: 'November', sales: 1712 },
-    { time: 'December', sales: 1900 },
-];
-
-const year2016 = [
-    { time: 'January', sales: 2075 },
-    { time: 'Febuary', sales: 2150 },
-    { time: 'March', sales: 2250 },
-    { time: 'April', sales: 2250 },
-    { time: 'May', sales: 2250 },
-    { time: 'June', sales: 2250 },
-    { time: 'July', sales: 2250 },
-    { time: 'August', sales: 2250 },
-    { time: 'September', sales: 2250 },
-    { time: 'October', sales: 2250 },
-    { time: 'November', sales: 2250 },
-    { time: 'December', sales: 2250 },
-];
-
-const year2017 = [
-    { time: 'January', sales: 2800 },
-    { time: 'Febuary', sales: 3000 },
-    { time: 'March', sales: 3000 },
-    { time: 'April', sales: 4400 },
-    { time: 'May', sales: 4400 },
-    { time: 'June', sales: 4400 },
-    { time: 'July', sales: 4400 },
-    { time: 'August', sales: 4400 },
-    { time: 'September', sales: 4517 },
-    { time: 'October', sales: 4545 },
-    { time: 'November', sales: 4745 },
-    { time: 'December', sales: 5460 },
-];
-
-const year2018 = [
-    { time: 'January', sales: 6875 },
-    { time: 'Febuary', sales: 7485 },
-    { time: 'March', sales: 8820 },
-    { time: 'April', sales: 6150 },
-    { time: 'May', sales: 11250 },
-    { time: 'June', sales: 11062 },
-    { time: 'July', sales: 16675 },
-    { time: 'August', sales: 21700 },
-    { time: 'September', sales: 29975 },
-    { time: 'October', sales: 20325 },
-    { time: 'November', sales: 24600 },
-    { time: 'December', sales: 32600 },
-];
-
-const year2019 = [
-    { time: 'January', sales: 8325 },
-    { time: 'Febuary', sales: 7650 },
-    { time: 'March', sales: 14625 },
-    { time: 'April', sales: 11925 },
-    { time: 'May', sales: 16350 },
-    { time: 'June', sales: 25025 },
-    { time: 'July', sales: 15650 },
-    { time: 'August', sales: 16025 },
-    { time: 'September', sales: 23025 },
-    { time: 'October', sales: 18612 },
-    { time: 'November', sales: 19301 },
-    { time: 'December', sales: 18612 },
-];
-
-const year2020 = [
-    { time: 'January', sales: 22350 },
-    { time: 'Febuary', sales: 20450 },
-    { time: 'March', sales: 10000 },
-    { time: 'April', sales: 6624 },
-    { time: 'May', sales: 14720 },
-    { time: 'June', sales: 15456 },
-    { time: 'July', sales: 48846 },
-    { time: 'August', sales: 43418 },
-    { time: 'September', sales: 47036 },
-    { time: 'October', sales: 21591 },
-    { time: 'November', sales: 17736 },
-    { time: 'December', sales: 24675 },
-];
-
-const year2021 = [
-    { time: 'January', sales: 21120 },
-    { time: 'Febuary', sales: 21120 },
-    { time: 'March', sales: 23760 },
-    { time: 'April', sales: 24751 },
-    { time: 'May', sales: 23799 },
-    { time: 'June', sales: 24751 },
-    { time: 'July', sales: 0 },
-    { time: 'August', sales: 0 },
-    { time: 'September', sales: 0 },
-    { time: 'October', sales: 0 },
-    { time: 'November', sales: 0 },
-    { time: 'December', sales: 0 },
-];
-
-
-
 function plotPieChart(data) {
     d3.select('svg').remove();
     
@@ -132,22 +14,19 @@ function plotPieChart(data) {
         .append('g')
         .attr('transform', 'translate(' + (width / 2) + ',' + (height / 2) + ')');
         
-    console.log("before coloring: ", data);
     const color = d3.scaleOrdinal().domain(data).range(["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928"]);
-    console.log("after coloring: ", color.domain());
     const tooltip = d3.select("body").append("div").attr("class", "toolTip");
 
     // Generate the pie
     const pie = d3.pie()
-                    .value(function(d) {
-                        // console.log(Math.round(d.percentage * 100));
-                        return Math.round(d.percentage * 100).toFixed(2);
-                    });
+                .value(function(d) {
+                    return Math.round(d.percentage * 100).toFixed(2);
+                });
 
     // Generate the arcs
     const arc = d3.arc()
-        .innerRadius(radius - 180)
-        .outerRadius(radius + 75);
+                .innerRadius(radius - 180)
+                .outerRadius(radius + 75);
 
     const arcData = d3.nest()
                 .key(function(d) {
@@ -205,11 +84,9 @@ function plotPieChart(data) {
                     tooltip.style("display", "none")
                 })
 
-
     g.append("path")
         .attr("d", arc)
         .style("fill", function(d) {
-            console.log(d, 'fefe');
             if(d.data != null && d.data.key.length !== 0) {
                 return color(d.data.key);
             }
@@ -222,7 +99,6 @@ function plotPieChart(data) {
         .attr("dy", ".35em")
         .style("text-anchor", "middle")
         .text(function(d) {
-            console.log('jiioo',d);
             return d.data.percentage.toFixed(0) + '%';
         });
     
@@ -239,8 +115,7 @@ function plotPieChart(data) {
                         const offset = h * color.domain().length / 2;
                         const horz = legendRectSize * 20;
                         const vert = i * h - offset;
-                        return 'translate(' + horz + ',' + vert + ')';
-                        
+                        return 'translate(' + horz + ',' + vert + ')';    
                     });
 
     legend.append('rect')
@@ -253,7 +128,6 @@ function plotPieChart(data) {
         .attr('x', legendRectSize + legendSpacing)
         .attr('y', legendRectSize - legendSpacing)
         .text(function(d) {
-            console.log('legend', d);
             return d; 
         });
     
@@ -369,6 +243,13 @@ function plotBarChart(data) {
         .attr('fill', function(d, i) {
             return color(i);
         })
+        .on('mouseover', function() {
+            var current = this;  
+            var others = svg.selectAll(".rect").filter(function(el) {
+                return this != current
+            });
+            others.selectAll("rect").style('opacity', 0.8);
+        })
         .on("mousemove", function(d){
             tooltip
                 .style("left", d3.event.pageX - 50 + "px")
@@ -376,24 +257,32 @@ function plotBarChart(data) {
                 .style("display", "inline-block")
                 .html("In " + (d.time) + ", <br>" + "Total Sales: " + (d.sales) + " cars");
         })
-        .on("mouseout", function(d){ tooltip.style("display", "none");});
-
-    //svg.selectAll('rect')
-            bars.append('text')
-            .text(function(d) {
-                console.log("check", d);
-                return d.sales;
-            })
-            .attr("x", function(d, i){
-                return xScale(i) + xScale.bandwidth() / 2;
-            })
-            .attr("y", function(d){
-                return yScale(d.sales) - 5;
-            })
-            .attr("font-family" , "sans-serif")
-            .attr("font-size" , "17px")
-            .attr("fill" , "black")
-            .attr("text-anchor", "middle");
+        .on('mouseout', function() {
+            var current = this;
+            d3.select(this)
+            .style('opacity', 1);
+            var others = svg.selectAll(".rect").filter(function(el) {
+                return this != current
+            });
+            others.selectAll("rect").style('opacity', 1);
+            tooltip.style("display", "none");
+        })
+        
+    bars.append('text')
+        .text(function(d) {
+            console.log("check", d);
+            return d.sales;
+        })
+        .attr("x", function(d, i){
+            return xScale(i) + xScale.bandwidth() / 2;
+        })
+        .attr("y", function(d){
+            return yScale(d.sales) - 5;
+        })
+        .attr("font-family" , "sans-serif")
+        .attr("font-size" , "17px")
+        .attr("fill" , "black")
+        .attr("text-anchor", "middle");
 
     d3.select('#bar2015').on('click', () => { 
                                             tooltip.remove();
@@ -439,3 +328,118 @@ function mainPage(next) {
         return;
     };
 };
+
+const totalSalesData = [
+    {time: '2015', sales: 87412 },
+    {time: '2016', sales: 26725 },
+    {time: '2017', sales: 50067 },
+    {time: '2018', sales: 197517 },
+    {time: '2019', sales: 195125 },
+    {time: '2020', sales: 292902 },
+    {time: '2021', sales: 139302 },
+];
+
+const year2015 = [
+    { time: 'January', sales: 0 },
+    { time: 'Febuary', sales: 2000 },
+    { time: 'March', sales: 1200 },
+    { time: 'April', sales: 1700 },
+    { time: 'May', sales: 1700 },
+    { time: 'June', sales: 1700 },
+    { time: 'July', sales: 1700 },
+    { time: 'August', sales: 1700 },
+    { time: 'September', sales: 1700 },
+    { time: 'October', sales: 1730 },
+    { time: 'November', sales: 1712 },
+    { time: 'December', sales: 1900 },
+];
+
+const year2016 = [
+    { time: 'January', sales: 2075 },
+    { time: 'Febuary', sales: 2150 },
+    { time: 'March', sales: 2250 },
+    { time: 'April', sales: 2250 },
+    { time: 'May', sales: 2250 },
+    { time: 'June', sales: 2250 },
+    { time: 'July', sales: 2250 },
+    { time: 'August', sales: 2250 },
+    { time: 'September', sales: 2250 },
+    { time: 'October', sales: 2250 },
+    { time: 'November', sales: 2250 },
+    { time: 'December', sales: 2250 },
+];
+
+const year2017 = [
+    { time: 'January', sales: 2800 },
+    { time: 'Febuary', sales: 3000 },
+    { time: 'March', sales: 3000 },
+    { time: 'April', sales: 4400 },
+    { time: 'May', sales: 4400 },
+    { time: 'June', sales: 4400 },
+    { time: 'July', sales: 4400 },
+    { time: 'August', sales: 4400 },
+    { time: 'September', sales: 4517 },
+    { time: 'October', sales: 4545 },
+    { time: 'November', sales: 4745 },
+    { time: 'December', sales: 5460 },
+];
+
+const year2018 = [
+    { time: 'January', sales: 6875 },
+    { time: 'Febuary', sales: 7485 },
+    { time: 'March', sales: 8820 },
+    { time: 'April', sales: 6150 },
+    { time: 'May', sales: 11250 },
+    { time: 'June', sales: 11062 },
+    { time: 'July', sales: 16675 },
+    { time: 'August', sales: 21700 },
+    { time: 'September', sales: 29975 },
+    { time: 'October', sales: 20325 },
+    { time: 'November', sales: 24600 },
+    { time: 'December', sales: 32600 },
+];
+
+const year2019 = [
+    { time: 'January', sales: 8325 },
+    { time: 'Febuary', sales: 7650 },
+    { time: 'March', sales: 14625 },
+    { time: 'April', sales: 11925 },
+    { time: 'May', sales: 16350 },
+    { time: 'June', sales: 25025 },
+    { time: 'July', sales: 15650 },
+    { time: 'August', sales: 16025 },
+    { time: 'September', sales: 23025 },
+    { time: 'October', sales: 18612 },
+    { time: 'November', sales: 19301 },
+    { time: 'December', sales: 18612 },
+];
+
+const year2020 = [
+    { time: 'January', sales: 22350 },
+    { time: 'Febuary', sales: 20450 },
+    { time: 'March', sales: 10000 },
+    { time: 'April', sales: 6624 },
+    { time: 'May', sales: 14720 },
+    { time: 'June', sales: 15456 },
+    { time: 'July', sales: 48846 },
+    { time: 'August', sales: 43418 },
+    { time: 'September', sales: 47036 },
+    { time: 'October', sales: 21591 },
+    { time: 'November', sales: 17736 },
+    { time: 'December', sales: 24675 },
+];
+
+const year2021 = [
+    { time: 'January', sales: 21120 },
+    { time: 'Febuary', sales: 21120 },
+    { time: 'March', sales: 23760 },
+    { time: 'April', sales: 24751 },
+    { time: 'May', sales: 23799 },
+    { time: 'June', sales: 24751 },
+    { time: 'July', sales: 0 },
+    { time: 'August', sales: 0 },
+    { time: 'September', sales: 0 },
+    { time: 'October', sales: 0 },
+    { time: 'November', sales: 0 },
+    { time: 'December', sales: 0 },
+];
