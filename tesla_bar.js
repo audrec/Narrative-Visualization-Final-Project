@@ -320,8 +320,10 @@ function mainPage(next) {
     };
 
     if (sel == "Pie") {
+        document.getElementById("header").innerHTML = "Tesla Sales Records Pie Chart";
         plotPieChart(totalSalesData);
     } else if (sel == "Bar") {
+        document.getElementById("header").innerHTML = "Tesla Sales Records Bar Chart";
         plotBarChart(totalSalesData);
     } else {
         return;
